@@ -69,10 +69,3 @@ jobs:
         with:
           name: build-${{ matrix.target }}
           path: pasona-${{ matrix.target }}.zip
-      - name: Zip output
-        run: zip ${{ matrix.target }}.zip ${{ matrix.target }}/release/
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage-report
-          path: ${{ matrix.target }}.zip
