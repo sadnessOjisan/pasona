@@ -6,7 +6,13 @@
 
 ### パッケージマネージャー
 
-TBD
+#### MacOS
+
+```
+brew tap sadnessOjisan/pasona
+
+brew install sadnessojisan/pasona/pasona
+```
 
 ### バイナリインストール
 
