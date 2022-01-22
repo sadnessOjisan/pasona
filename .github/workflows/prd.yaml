@@ -98,6 +98,8 @@ jobs:
           name: build-${{ matrix.target }}
       - name: echo
         run: echo ${{ steps.upload-url.outputs.url }}
+      - name: cat
+        run: cat create-release/release_upload_url.txt
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
