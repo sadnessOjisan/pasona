@@ -62,6 +62,12 @@ jobs:
         if: matrix.target == 'x86_64-apple-darwin'
         run: |
           zip --junk-paths pasona-${{ matrix.target }} target/${{ matrix.target }}/release/pasona
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.target }}
+          path: pasona-${{ matrix.target }}.zip
+
   create-release:
     needs: [build]
     runs-on: ubuntu-latest
