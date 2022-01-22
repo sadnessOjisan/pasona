@@ -1,5 +1,5 @@
-name: publish
-"on":
+name: build
+on:
   push:
     branches:
       - main
