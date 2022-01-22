@@ -91,11 +91,11 @@ impl Question {
                 q: "頬は赤くなりやすいですか？".to_string(),
                 choices: vec![
                     Choice {
-                        answer: "似合う".to_string(),
+                        answer: "赤くなりやすい".to_string(),
                         score: HashMap::from([(Kind::イエベ春, 1), (Kind::ブルベ夏, 1)]),
                     },
                     Choice {
-                        answer: "安く見える".to_string(),
+                        answer: "赤くなりにくい".to_string(),
                         score: HashMap::from([(Kind::ブルベ冬, 1), (Kind::イエベ秋, 1)]),
                     },
                 ],
