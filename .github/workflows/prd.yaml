@@ -103,12 +103,6 @@ jobs:
       - id: upload-url
         run: |
           echo "::set-output name=url::$(cat create-release/release_upload_url.txt)"
-      - name: ls
-        run: ls -al
-      - name: echo
-        run: echo ${{ steps.upload-url.outputs.url }}
-      - name: cat
-        run: cat create-release/release_upload_url.txt
       - uses: actions/download-artifact@v1
         with:
           name: build-${{ matrix.target }}
