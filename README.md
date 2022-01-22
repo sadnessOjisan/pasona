@@ -3,5 +3,5 @@
 パーソナルカラー診断
 
 ```
-cargo run
+pasona
 ```
