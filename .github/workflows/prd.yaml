@@ -5,35 +5,63 @@ on:
       - "v*"
 jobs:
   build:
-    name: Rust ${{ matrix.os }} ${{ matrix.rust }}
-    runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
         target:
-          [
-            x86_64-unknown-linux-musl,
-            x86_64-apple-darwin,
-            x86_64-pc-windows-msvc,
-            x86_64-unknown-linux-gnu,
-          ]
-    steps:
-      - uses: actions/checkout@v2
+          - x86_64-unknown-linux-musl
+          - x86_64-pc-windows-msvc
+          - x86_64-apple-darwin
+        include:
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+          - target: x86_64-apple-darwin
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
 
-      - name: Setup Rust
+    steps:
+      - name: Setup code
+        uses: actions/checkout@v2
+
+      - name: Install musl tools
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: |
+          sudo apt install -qq -y musl-tools --no-install-recommends
+
+      - name: Setup Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
+          target: ${{ matrix.target }}
           override: true
+
+      - name: test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+
       - name: Build
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release --target=${{ matrix.target }}
-          use-cross: true
-      - name: Zip output
-        run: zip pasona.zip target/release
+
+      - name: Package for linux-musl
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: |
+          zip --junk-paths pasona-${{ matrix.target }} target/${{ matrix.target }}/release/pasona
+
+      - name: Package for windows
+        if: matrix.target == 'x86_64-pc-windows-msvc'
+        run: |
+          powershell Compress-Archive -Path target/${{ matrix.target }}/release/pasona.exe -DestinationPath pasona-${{ matrix.target }}.zip
+
+      - name: Package for macOS
+        if: matrix.target == 'x86_64-apple-darwin'
+        run: |
+          zip --junk-paths pasona-${{ matrix.target }} target/${{ matrix.target }}/release/pasona
       - name: Create release
         id: create_release
         uses: actions/create-release@v1.0.0
@@ -51,6 +79,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./pasona.zip
-          asset_name: pasona.zip
+          asset_path: ./pasona-${{ matrix.target }}.zip
+          asset_name: pasona-${{ matrix.target }}.zip
           asset_content_type: application/zip
