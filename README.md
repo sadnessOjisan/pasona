@@ -4,7 +4,7 @@
 
 ![診断結果のイメージ図](./images/top.png)
 
-## Download 💽
+## Install 💽
 
 ### パッケージマネージャー
 
@@ -41,4 +41,10 @@ git clone git@github.com:sadnessOjisan/pasona.git
 cd pasona
 
 cargo run
+```
+
+## How to use 📖
+
+```
+pasona
 ```
