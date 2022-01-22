@@ -10,9 +10,13 @@ jobs:
 
     strategy:
       matrix:
-        rust:
-          - stable
-        os: [ubuntu-latest]
+        target:
+          [
+            x86_64-unknown-linux-musl,
+            x86_64-apple-darwin,
+            x86_64-pc-windows-msvc,
+            x86_64-unknown-linux-gnu,
+          ]
     steps:
       - uses: actions/checkout@v2
 
@@ -23,7 +27,11 @@ jobs:
           toolchain: ${{ matrix.rust }}
           override: true
       - name: Build
-        run: cargo build --release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target=${{ matrix.target }}
+          use-cross: true
       - name: Zip output
         run: zip pasona.zip target/release
       - name: Create release
