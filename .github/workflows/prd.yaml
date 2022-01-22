@@ -93,12 +93,14 @@ jobs:
           echo "::set-output name=url::$(cat create-release/release_upload_url.txt)"
       - uses: actions/download-artifact@v1
         with:
-          name: build-${{ matrix.target }}
+          name: ${{ matrix.target }}
+      - name: "ls"
+        run: ls
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.upload-url.outputs.url }}
-          asset_path: ./build-${{ matrix.target }}/pasona-${{ matrix.target }}.zip
+          asset_path: ./${{ matrix.target }}/pasona-${{ matrix.target }}.zip
           asset_name: pasona-${{ matrix.target }}.zip
           asset_content_type: application/zip
