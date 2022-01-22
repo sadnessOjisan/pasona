@@ -16,6 +16,14 @@ brew tap sadnessOjisan/pasona
 brew install sadnessojisan/pasona/pasona
 ```
 
+#### Windows
+
+TBD
+
+#### Linux
+
+TBD
+
 ### バイナリインストール
 
 | 環境    | URL                                                                                                   |
